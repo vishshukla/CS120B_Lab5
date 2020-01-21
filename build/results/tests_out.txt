@@ -1,0 +1,25 @@
+Breakpoint 1 at 0xe6: file source/main.c, line 21.
+Note: automatically using hardware breakpoints for read-only addresses.
+A program is being debugged already.
+Are you sure you want to change the file? (y or n) 
+Load new symbol table from "/home/csmajs/vshuk003/Lab5_atmega/build/objects/main.elf"? (y or n) Reading symbols from /home/csmajs/vshuk003/Lab5_atmega/build/objects/main.elf...done.
+A program is being debugged already.  Kill it? (y or n) 
+Remote debugging using :1234
+0x000000e8 in main () at source/main.c:23
+23		PORTB = 0x0F;
+Note: breakpoint 1 also set at pc 0xe6.
+Breakpoint 2 at 0xe6: file source/main.c, line 21.
+Type commands for breakpoint(s) 2, one per line.
+End with a line saying just "end".
+Continuing.
+PINA addr0x800020:	0x00
+PORTB addr0x800025:	0x0f
+Will ignore next 4 crossings of breakpoint 1.  Will ignore next 4 crossings of breakpoint 2.  Continuing.
+PINA addr0x800020:	0xf0
+PORTB addr0x800025:	0x0f
+A debugging session is active.
+
+	Inferior 1 [Remote target] will be detached.
+
+Quit anyway? (y or n) Detaching from program: /home/csmajs/vshuk003/Lab5_atmega/build/objects/main.elf, Remote target
+Quitting: Remote doesn't know how to detach
