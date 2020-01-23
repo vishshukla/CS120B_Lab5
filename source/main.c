@@ -15,12 +15,22 @@
 int main(void) {
     /* Insert DDR and PORT initializations */
 	// Configure port B's 8 pins as outputs
-	DDRB = 0xFF; PORTB = 0x00;
-
+	DDRA = 0x00; PORTA = 0xFF;
+	DDRC = 0xFF; PORTC = 0x00;
+	unsigned char led = 0x00;
+	unsigned char button = 0x00;
     /* Insert your solution below */
     while (1) {
-	// Writes port B's 8 pins with 00001111
-	PORTB = 0x0F;
+	// input
+	button = ~PINA & 0x01;
+	
+	if (button) {
+		led = (led & 0xFC) | 0x01;
+	} else {
+		led = (led & 0xFC) | 0x02;
+	}
+
+	PORTC = led;
     }
     return 1;
 }
