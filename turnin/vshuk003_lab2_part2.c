@@ -8,17 +8,13 @@
  *	code, is my own original work.
  */
 #include <avr/io.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 #ifdef _SIMULATE_
 #include "simAVRHeader.h"
 #endif
 
-enum States { start, s0, configure, wait } state;
+enum States { start, s0, pressed} state;
 
 unsigned char newA = 0x00;
-unsigned char first = 0x00, second = 0x00;
 
 void tick() {
     newA = ~PINA;
@@ -28,33 +24,35 @@ void tick() {
 			break;
 		case s0:
 			if((newA & 0x0F) == 0x01) {
-				state = configure;
+				state = pressed;
+                if(PORTC < 9) PORTC++;
+			} else if((newA & 0x0F) == 0x02){
+				state = pressed;
+                if(PORTC > 0) PORTC--;
+			} else if((newA & 0x0F) == 0x03){
+				PORTC = 0x00;
 			} else {
 				state = s0;
 			}
 			break;
-        case configure:
-            state = wait;
-           break;
-        case wait:
-            if((newA & 0x01) == 0x01) state = wait;
-            else state = s0;
+        case pressed:
+            if((newA & 0x0F) == 0x01 || (newA & 0x0F) == 0x02) {
+                state = pressed;
+            } else if ((newA & 0x0F) == 0x03) {
+                PORTC = 0x00;
+                state = pressed;
+            } else {
+                state = s0;
+            }
             break;
 	default:
             state = s0;
             break;
 	}
 	switch(state) { //actions
-		case start: PORTC = 0; break;
-		case s0: break; 
-		case configure:
-                 first = (rand() % 5) + 1;
-                 second = (rand() % 5) + 1;
-                 if(first == second) first = ((first + 1) % 5) + 1;
-                 PORTC = (0x01 << first) | (0x01 << second);
-                 break;
-        case wait:
-                 break;
+		case start:
+		case s0: 
+		case pressed:
 		default:
 			break;
 	}
@@ -64,7 +62,7 @@ void tick() {
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0xFF;
-	DDRC = 0xFF; PORTC = 0x00;
+	DDRC = 0xFF; PORTC = 0x07;
 	state = start;
 	while(1) {
 		tick();
